@@ -65,12 +65,12 @@ def main():
     docker_client = docker.from_env()
     
     # Create a Docker network for BGP containers with subnet 10.0.0.0/24.
-    bgp_net_name = "bgp_network"
+    bgp_net_name = "bgp_net"
     try:
         bgp_net = docker_client.networks.get(bgp_net_name)
         print(f"Network '{bgp_net_name}' already exists.")
     except docker.errors.NotFound:
-        ipam_pool = docker.types.IPAMPool(subnet="111.0.0.0/24", gateway="111.0.0.1")
+        ipam_pool = docker.types.IPAMPool(subnet="10.0.0.0/24", gateway="10.0.0.1")
         ipam_config = docker.types.IPAMConfig(pool_configs=[ipam_pool])
         bgp_net = docker_client.networks.create(bgp_net_name, driver="bridge", ipam=ipam_config)
         print(f"Created Docker network '{bgp_net_name}'.")
